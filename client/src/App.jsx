@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
+import { db } from './firebase';
+import { ref, push, onValue } from "firebase/database";
+import { menu as staticMenu } from './data';
 import './App.css';
 
-// Components (We will create these next)
+// Components
 import MenuList from './components/MenuList';
 import CartAction from './components/CartAction';
 import OrderSuccess from './components/OrderSuccess';
 import AdminDashboard from './components/AdminDashboard';
 
-// Initialize Socket (outside component to avoid reconnects, or use ref/effect)
-const SOCKET_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3001';
-const socket = io(SOCKET_URL);
-
 function App() {
   const [view, setView] = useState('menu'); // menu, cart, success, admin
   const [tableId, setTableId] = useState(null);
   const [cart, setCart] = useState({}); // { itemId: quantity }
-  const [menu, setMenu] = useState([]);
+  const [menu, setMenu] = useState(staticMenu);
   const [currentOrder, setCurrentOrder] = useState(null);
 
   // Check URL for table ID or Admin route
@@ -29,53 +27,10 @@ function App() {
       setView('admin');
     } else if (table) {
       setTableId(table);
-    } else {
-      // Default table for demo if none provided
-      // setTableId(1);
     }
   }, []);
 
-  // Fetch Menu
-  useEffect(() => {
-    fetch(`${SOCKET_URL}/api/menu`)
-      .then(res => res.json())
-      .then(data => setMenu(data))
-      .catch(err => console.error("Failed to fetch menu:", err));
-  }, []);
-
-  // Socket Listeners
-  useEffect(() => {
-    socket.on('order_confirmed', (order) => {
-      console.log('Order confirmed:', order);
-      setCurrentOrder(order);
-      setView('success');
-      setCart({}); // Clear cart
-    });
-
-    return () => {
-      socket.off('order_confirmed');
-    };
-  }, []);
-
-  const addToCart = (itemId) => {
-    setCart(prev => ({
-      ...prev,
-      [itemId]: (prev[itemId] || 0) + 1
-    }));
-  };
-
-  const removeFromCart = (itemId) => {
-    setCart(prev => {
-      const newCart = { ...prev };
-      if (newCart[itemId] > 1) {
-        newCart[itemId]--;
-      } else {
-        delete newCart[itemId];
-      }
-      return newCart;
-    });
-  };
-
+  // Place Order
   const placeOrder = () => {
     if (!tableId) {
       alert("Please scan a valid table QR code.");
@@ -98,14 +53,48 @@ function App() {
     const orderData = {
       tableId,
       items,
-      total
+      total,
+      status: 'pending',
+      timestamp: Date.now()
     };
 
-    socket.emit('place_order', orderData);
+    // Push to Firebase
+    push(ref(db, 'orders'), orderData)
+      .then((ref) => {
+        // Success
+        const orderWithId = { ...orderData, id: ref.key };
+        console.log('Order placed:', orderWithId);
+        setCurrentOrder(orderWithId);
+        setView('success');
+        setCart({}); // Clear cart
+      })
+      .catch((error) => {
+        console.error("Error adding document: ", error);
+        alert("Failed to place order. Please try again.");
+      });
+  };
+
+  const addToCart = (itemId) => {
+    setCart(prev => ({
+      ...prev,
+      [itemId]: (prev[itemId] || 0) + 1
+    }));
+  };
+
+  const removeFromCart = (itemId) => {
+    setCart(prev => {
+      const newCart = { ...prev };
+      if (newCart[itemId] > 1) {
+        newCart[itemId]--;
+      } else {
+        delete newCart[itemId];
+      }
+      return newCart;
+    });
   };
 
   if (view === 'admin') {
-    return <AdminDashboard socket={socket} />;
+    return <AdminDashboard />;
   }
 
   if (!tableId && view !== 'admin') {

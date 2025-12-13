@@ -1,43 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
+import { db } from '../firebase';
+import { ref, onValue, update } from "firebase/database";
 
-const AdminDashboard = ({ socket }) => {
+const AdminDashboard = () => {
     const [orders, setOrders] = useState([]);
     const [view, setView] = useState('orders'); // 'orders' or 'qr'
 
     useEffect(() => {
-        // Join admin room
-        socket.emit('join_admin');
+        // Listen for orders
+        const ordersRef = ref(db, 'orders');
+        const unsubscribe = onValue(ordersRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                // Convert object to array
+                const ordersArray = Object.entries(data).map(([key, value]) => ({
+                    id: key,
+                    ...value
+                }));
+                // Sort by timestamp (newest first)
+                ordersArray.sort((a, b) => b.timestamp - a.timestamp);
 
-        // Fetch existing orders
-        fetch('http://localhost:3001/api/orders')
-            .then(res => res.json())
-            .then(data => setOrders(data))
-            .catch(err => console.error("Failed to fetch orders:", err));
-
-        // Listen for new orders
-        socket.on('new_order', (newOrder) => {
-            console.log('New order received:', newOrder);
-            setOrders(prev => [newOrder, ...prev]);
-
-            // Play sound
-            const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-positive-notification-951.mp3');
-            audio.play().catch(e => console.log('Audio play failed', e));
+                // Check if there's a new order to play sound (simple check: length increased)
+                // In production, you'd want a more robust way to detect *new* vs *updated*
+                // keeping it simple for now: if new length > old length, play sound.
+                // NOTE: This runs on initial load too.
+                setOrders(prev => {
+                    if (ordersArray.length > prev.length && prev.length > 0) {
+                        const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-positive-notification-951.mp3');
+                        audio.play().catch(e => console.log('Audio play failed', e));
+                    }
+                    return ordersArray;
+                });
+            } else {
+                setOrders([]);
+            }
         });
 
-        socket.on('status_updated', ({ orderId, status }) => {
-            setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status } : o));
-        });
-
-        return () => {
-            socket.off('new_order');
-            socket.off('status_updated');
-        };
-    }, [socket]);
+        return () => unsubscribe();
+    }, []);
 
     const updateStatus = (orderId, newStatus) => {
-        setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
-        socket.emit('update_status', { orderId, status: newStatus });
+        update(ref(db, 'orders/' + orderId), { status: newStatus })
+            .catch(error => console.error("Error updating status:", error));
     };
 
     return (
