@@ -100,7 +100,7 @@ function App() {
   if (!tableId && view !== 'admin') {
     return (
       <div className="container" style={{ textAlign: 'center', marginTop: '50px' }}>
-        <h1>Welcome to QR Dine</h1>
+        <h1 style={{ color: '#ff4d4d' }}>Welcome to Rocket Burgers 🚀</h1>
         <p>Please scan a QR code on your table to order.</p>
         <p style={{ fontSize: '0.8rem', color: '#666' }}>Dev Note: Try adding ?table=1 to the URL</p>
       </div>
@@ -116,7 +116,7 @@ function App() {
           <header className="header container">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h3>Table {tableId}</h3>
-              <div className="logo">QR Dine</div>
+              <div className="logo" style={{ color: '#ff4d4d', fontWeight: 'bold' }}>Rocket Burgers 🚀</div>
             </div>
           </header>
 

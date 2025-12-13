@@ -48,7 +48,7 @@ const AdminDashboard = () => {
     return (
         <div className="container" style={{ maxWidth: '800px' }}>
             <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px', paddingTop: '20px' }}>
-                <h1>Kitchen Display</h1>
+                <h1>Rocket Kitchen 👨‍🍳</h1>
                 <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
                     <nav style={{ display: 'flex', gap: '8px', backgroundColor: '#252830', padding: '4px', borderRadius: '8px' }}>
                         <button
