@@ -9,7 +9,7 @@ import OrderSuccess from './components/OrderSuccess';
 import AdminDashboard from './components/AdminDashboard';
 
 // Initialize Socket (outside component to avoid reconnects, or use ref/effect)
-const SOCKET_URL = 'http://localhost:3001';
+const SOCKET_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3001';
 const socket = io(SOCKET_URL);
 
 function App() {
