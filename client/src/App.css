@@ -1,3 +1,16 @@
+:root {
+  --primary-color: #D97706;
+  /* Warm Orange */
+  --secondary-color: #FEF3C7;
+  /* Light Warm Beige */
+  --text-primary: #1F2937;
+  --text-secondary: #4B5563;
+  --card-bg: #FFFFFF;
+  --bg-color: #FDFBF7;
+  /* Very light warm background */
+  --border-color: #E5E7EB;
+}
+
 .app-container {
   min-height: 100vh;
   padding-bottom: 100px;

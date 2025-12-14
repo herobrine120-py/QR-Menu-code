@@ -100,7 +100,7 @@ function App() {
   if (!tableId && view !== 'admin') {
     return (
       <div className="container" style={{ textAlign: 'center', marginTop: '50px' }}>
-        <h1 style={{ color: '#ff4d4d' }}>Welcome to Rocket Burgers 🚀</h1>
+        <h1 style={{ color: '#000' }}>Welcome to From Tangier</h1>
         <p>Please scan a QR code on your table to order.</p>
         <p style={{ fontSize: '0.8rem', color: '#666' }}>Dev Note: Try adding ?table=1 to the URL</p>
       </div>
@@ -113,11 +113,10 @@ function App() {
         <OrderSuccess order={currentOrder} onBack={() => setView('menu')} />
       ) : (
         <>
-          <header className="header container">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h3>Table {tableId}</h3>
-              <div className="logo" style={{ color: '#ff4d4d', fontWeight: 'bold' }}>Rocket Burgers 🚀</div>
-            </div>
+          <header className="header container" style={{ flexDirection: 'column', gap: '8px', padding: '24px 0', textAlign: 'center' }}>
+            <div className="logo" style={{ color: '#000', fontSize: '2rem', fontWeight: 'bold', letterSpacing: '-1px' }}>From Tangier</div>
+            <div style={{ color: '#666', fontSize: '0.9rem', letterSpacing: '2px', textTransform: 'uppercase' }}>Original Tanjawi • Sandwich Bar, Café, Jus</div>
+            {tableId && <div style={{ fontSize: '0.8rem', color: '#D97706', marginTop: '4px' }}>Table {tableId}</div>}
           </header>
 
           <main className="container">
