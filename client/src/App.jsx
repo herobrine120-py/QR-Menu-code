@@ -113,7 +113,7 @@ function App() {
         <OrderSuccess order={currentOrder} onBack={() => setView('menu')} />
       ) : (
         <>
-          <header className="header container" style={{ flexDirection: 'column', gap: '8px', padding: '24px 0', textAlign: 'center' }}>
+          <header className="header container" style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '24px 0', alignItems: 'center', textAlign: 'center' }}>
             <div style={{ marginBottom: '8px' }}>
               <img src="/logo.jpg" alt="From Tangier Logo" style={{ width: '140px', height: '140px', objectFit: 'contain', borderRadius: '50%' }} />
             </div>
