@@ -38,7 +38,7 @@ const OrderSuccess = ({ order, onBack }) => {
                 </div>
             </div>
 
-            <button className="btn" style={{ backgroundColor: 'var(--surface-color)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }} onClick={onBack}>
+            <button className="btn" style={{ backgroundColor: 'var(--primary-color)', color: 'white', width: '100%', maxWidth: '300px', padding: '16px' }} onClick={onBack}>
                 Back to Menu
             </button>
         </div>

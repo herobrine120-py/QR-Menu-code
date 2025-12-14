@@ -50,14 +50,18 @@ const AdminDashboard = () => {
             <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px', paddingTop: '20px' }}>
                 <h1>Rocket Kitchen 👨‍🍳</h1>
                 <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-                    <nav style={{ display: 'flex', gap: '8px', backgroundColor: '#252830', padding: '4px', borderRadius: '8px' }}>
+                    <nav style={{ display: 'flex', gap: '8px', backgroundColor: '#F3F4F6', padding: '4px', borderRadius: '8px' }}>
                         <button
                             onClick={() => setView('orders')}
                             style={{
                                 padding: '8px 16px',
                                 borderRadius: '6px',
-                                backgroundColor: view === 'orders' ? '#333a45' : 'transparent',
-                                color: view === 'orders' ? 'white' : '#9ca3af'
+                                backgroundColor: view === 'orders' ? 'white' : 'transparent',
+                                color: view === 'orders' ? '#D97706' : '#6B7280',
+                                fontWeight: '600',
+                                border: 'none',
+                                cursor: 'pointer',
+                                boxShadow: view === 'orders' ? '0 1px 2px rgba(0,0,0,0.1)' : 'none'
                             }}
                         >
                             Orders
@@ -67,8 +71,12 @@ const AdminDashboard = () => {
                             style={{
                                 padding: '8px 16px',
                                 borderRadius: '6px',
-                                backgroundColor: view === 'qr' ? '#333a45' : 'transparent',
-                                color: view === 'qr' ? 'white' : '#9ca3af'
+                                backgroundColor: view === 'qr' ? 'white' : 'transparent',
+                                color: view === 'qr' ? '#D97706' : '#6B7280',
+                                fontWeight: '600',
+                                border: 'none',
+                                cursor: 'pointer',
+                                boxShadow: view === 'qr' ? '0 1px 2px rgba(0,0,0,0.1)' : 'none'
                             }}
                         >
                             QR Codes
@@ -119,7 +127,8 @@ const AdminDashboard = () => {
                                                 width: '24px',
                                                 height: '24px',
                                                 borderRadius: '50%',
-                                                backgroundColor: '#333',
+                                                backgroundColor: 'var(--secondary-color)',
+                                                color: 'var(--primary-color)',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
