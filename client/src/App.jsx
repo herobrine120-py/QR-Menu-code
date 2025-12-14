@@ -114,6 +114,9 @@ function App() {
       ) : (
         <>
           <header className="header container" style={{ flexDirection: 'column', gap: '8px', padding: '24px 0', textAlign: 'center' }}>
+            <div style={{ marginBottom: '8px' }}>
+              <img src="/logo.png" alt="From Tangier Logo" style={{ width: '120px', height: '120px', objectFit: 'contain' }} />
+            </div>
             <div className="logo" style={{ color: '#000', fontSize: '2rem', fontWeight: 'bold', letterSpacing: '-1px' }}>From Tangier</div>
             <div style={{ color: '#666', fontSize: '0.9rem', letterSpacing: '2px', textTransform: 'uppercase' }}>Original Tanjawi • Sandwich Bar, Café, Jus</div>
             {tableId && <div style={{ fontSize: '0.8rem', color: '#D97706', marginTop: '4px' }}>Table {tableId}</div>}
